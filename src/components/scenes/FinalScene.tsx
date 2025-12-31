@@ -28,7 +28,7 @@ export const FinalScene = ({ onRestart, userName }: FinalSceneProps) => {
   const createBurst = useCallback(() => {
     const newBursts: BurstEmoji[] = [];
     const numEmojis = 15 + Math.floor(Math.random() * 10);
-    
+
     for (let i = 0; i < numEmojis; i++) {
       newBursts.push({
         id: Date.now() + i,
@@ -39,21 +39,21 @@ export const FinalScene = ({ onRestart, userName }: FinalSceneProps) => {
         distance: 100 + Math.random() * 150,
       });
     }
-    
+
     setBursts((prev) => [...prev, ...newBursts]);
     setHugCount((prev) => prev + 1);
-    
-    // Show final message after 3 hugs
+
     if (hugCount >= 2) {
       setTimeout(() => {
         setShowFinalMessage(true);
         setShowConfetti(true);
       }, 1000);
     }
-    
-    // Clean up old bursts
+
     setTimeout(() => {
-      setBursts((prev) => prev.filter((b) => !newBursts.some((nb) => nb.id === b.id)));
+      setBursts((prev) =>
+        prev.filter((b) => !newBursts.some((nb) => nb.id === b.id))
+      );
     }, 2000);
   }, [hugCount]);
 
@@ -64,9 +64,8 @@ export const FinalScene = ({ onRestart, userName }: FinalSceneProps) => {
       animate={{ opacity: 1 }}
       transition={{ duration: 0.8 }}
     >
-      {/* Confetti cannon */}
       <ConfettiCannon trigger={showConfetti} />
-      
+
       {/* Ambient sparkles */}
       <div className="absolute inset-0 pointer-events-none">
         {Array.from({ length: 20 }, (_, i) => (
@@ -103,23 +102,20 @@ export const FinalScene = ({ onRestart, userName }: FinalSceneProps) => {
               left: `${burst.x}%`,
               top: `${burst.y}%`,
             }}
-            initial={{ 
-              scale: 0, 
-              opacity: 1,
-              x: 0,
-              y: 0,
-            }}
-            animate={{ 
+            initial={{ scale: 0, opacity: 1, x: 0, y: 0 }}
+            animate={{
               scale: [0, 1.2, 1],
               opacity: [1, 1, 0],
-              x: Math.cos(burst.angle * Math.PI / 180) * burst.distance,
-              y: Math.sin(burst.angle * Math.PI / 180) * burst.distance - 50,
+              x:
+                Math.cos((burst.angle * Math.PI) / 180) *
+                burst.distance,
+              y:
+                Math.sin((burst.angle * Math.PI) / 180) *
+                  burst.distance -
+                50,
             }}
             exit={{ opacity: 0 }}
-            transition={{ 
-              duration: 1.5,
-              ease: "easeOut",
-            }}
+            transition={{ duration: 1.5, ease: "easeOut" }}
           >
             {burst.emoji}
           </motion.div>
@@ -133,12 +129,10 @@ export const FinalScene = ({ onRestart, userName }: FinalSceneProps) => {
         animate={{ y: 0, opacity: 1 }}
         transition={{ delay: 0.3, duration: 0.6 }}
       >
-        {/* Tap for hug */}
+        {/* Hug button */}
         <motion.div
           className="mb-8"
-          animate={!showFinalMessage ? {
-            scale: [1, 1.05, 1],
-          } : {}}
+          animate={!showFinalMessage ? { scale: [1, 1.05, 1] } : {}}
           transition={{ duration: 2, repeat: Infinity }}
         >
           <motion.button
@@ -169,25 +163,6 @@ export const FinalScene = ({ onRestart, userName }: FinalSceneProps) => {
               <p className="text-muted-foreground">
                 Keep tapping for more love!
               </p>
-              {hugCount > 0 && (
-                <motion.div
-                  className="mt-4 flex justify-center gap-1"
-                  initial={{ scale: 0 }}
-                  animate={{ scale: 1 }}
-                >
-                  {Array.from({ length: Math.min(hugCount, 10) }, (_, i) => (
-                    <motion.span
-                      key={i}
-                      className="text-xl"
-                      initial={{ scale: 0 }}
-                      animate={{ scale: 1 }}
-                      transition={{ delay: i * 0.05 }}
-                    >
-                      💖
-                    </motion.span>
-                  ))}
-                </motion.div>
-              )}
             </motion.div>
           ) : (
             <motion.div
@@ -212,41 +187,37 @@ export const FinalScene = ({ onRestart, userName }: FinalSceneProps) => {
                 >
                   🌟
                 </motion.div>
-                
+
                 <motion.h2
                   className="text-2xl md:text-3xl font-display font-bold text-foreground mb-4"
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  transition={{ delay: 0.4 }}
                 >
                   {userName}, wishing you a year full of warmth and magic
                 </motion.h2>
-                
-                <motion.p
-                  className="text-lg text-muted-foreground mb-6"
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  transition={{ delay: 0.6 }}
-                >
+
+                <p className="text-lg text-muted-foreground mb-6">
                   May 2026 bring you endless joy ✨
-                </motion.p>
-                
-                <motion.div
-                  className="pt-4 border-t border-border"
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  transition={{ delay: 0.8 }}
-                >
+                </p>
+
+                {/* Family section */}
+                <div className="pt-4 border-t border-border flex flex-col items-center">
+                  <motion.img
+                    src="/family.jpg"
+                    alt="Hansraj Jain Family"
+                    className="w-28 h-28 md:w-32 md:h-32 rounded-2xl object-cover shadow-xl mb-4"
+                    initial={{ scale: 0.8, opacity: 0 }}
+                    animate={{ scale: 1, opacity: 1 }}
+                    transition={{ duration: 0.6 }}
+                  />
+
                   <p className="font-display font-semibold text-lg text-foreground">
-                    — HansRaj Jain & Family
+                    — Hansraj Jain & Family
                   </p>
                   <p className="text-sm text-muted-foreground mt-1">
                     With love 💝
                   </p>
-                </motion.div>
+                </div>
               </motion.div>
-              
-              {/* Experience Again button */}
+
               <motion.div
                 className="mt-8"
                 initial={{ opacity: 0, y: 20 }}
@@ -262,11 +233,11 @@ export const FinalScene = ({ onRestart, userName }: FinalSceneProps) => {
         </AnimatePresence>
       </motion.div>
 
-      {/* Decorative elements */}
       <motion.div
         className="absolute bottom-0 left-0 right-0 h-32 pointer-events-none"
         style={{
-          background: "linear-gradient(to top, hsl(var(--rose) / 0.2), transparent)",
+          background:
+            "linear-gradient(to top, hsl(var(--rose) / 0.2), transparent)",
         }}
       />
     </motion.div>
