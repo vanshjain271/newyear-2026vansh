@@ -238,7 +238,7 @@ export const FinalScene = ({ onRestart, userName }: FinalSceneProps) => {
                   transition={{ delay: 0.8 }}
                 >
                   <p className="font-display font-semibold text-lg text-foreground">
-                    — Vansh Jain & Family
+                    — HansRaj Jain & Family
                   </p>
                   <p className="text-sm text-muted-foreground mt-1">
                     With love 💝
